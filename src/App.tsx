@@ -1,9 +1,8 @@
 import "./App.css";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Stars } from "@react-three/drei";
-import Earth from "./Earth";
-import Sun from "./Sun";
-import { Perf } from "r3f-perf";
+import Earth from "./planets/Earth";
+import Sun from "./planets/Sun";
 
 function SolarSystem() {
   return (
@@ -11,8 +10,6 @@ function SolarSystem() {
       <color attach="background" args={["black"]} />
 
       <Sun />
-
-      <Earth />
 
       <Stars />
 

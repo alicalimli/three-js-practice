@@ -4,8 +4,8 @@ import { memo, useCallback, useRef } from "react";
 import { Mesh } from "three";
 import * as THREE from "three";
 
-const Moon = () => {
-  const [moonTexture] = useTexture(["/moon_texture.jpg"]);
+const Venus = () => {
+  const [venusTexture] = useTexture(["/venus.jpeg"]);
 
   const circleRef = useRef<Mesh>(null);
   const clockRef = useRef(new THREE.Clock());
@@ -14,9 +14,9 @@ const Moon = () => {
     if (!circleRef.current || !clockRef.current) return;
 
     circleRef.current.position.x =
-      Math.sin(clockRef.current.getElapsedTime() * 0.8) * 4;
+      Math.sin(clockRef.current.getElapsedTime() * 0.8) * 8;
     circleRef.current.position.z =
-      Math.cos(clockRef.current.getElapsedTime() * 0.8) * 4;
+      Math.cos(clockRef.current.getElapsedTime() * 0.8) * 8;
 
     circleRef.current.rotation.y += 0.002;
   }, []);
@@ -27,8 +27,8 @@ const Moon = () => {
     <mesh receiveShadow castShadow ref={circleRef} position={[4, 0, 0]}>
       <sphereGeometry args={[0.8, 32, 32]} />
       <meshPhongMaterial
-        map={moonTexture}
-        emissiveMap={moonTexture}
+        map={venusTexture}
+        emissiveMap={venusTexture}
         emissiveIntensity={0.1}
         emissive={0xffffff}
       />
@@ -36,4 +36,4 @@ const Moon = () => {
   );
 };
 
-export default memo(Moon);
+export default memo(Venus);

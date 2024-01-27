@@ -1,65 +1,43 @@
-import "./App.css";
 import { useFrame } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
 import { memo, useCallback, useRef } from "react";
-import Moon from "./Moon";
 import * as THREE from "three";
 
 const Earth = () => {
-  const [
-    earthTexture,
-    earthNormal,
-    earthSpecular,
-    earthDisplacement,
-    earthNight,
-  ] = useTexture([
+  const [earthTexture, earthNormal, earthNight] = useTexture([
     "/earth_day.jpg",
     "/earth_normal.jpg",
-    "/earth_specular.jpg",
-    "/earth_displacement.jpg",
     "/earth_night.jpg",
   ]);
 
-  const earthRef = useRef<THREE.Group>(null);
-  const earthPositionRef = useRef(new THREE.Vector3(8, 0, 0));
+  const circleRef = useRef<THREE.Mesh>(null);
   const clockRef = useRef(new THREE.Clock());
 
-  const updateEarthPos = useCallback(() => {
-    if (!earthRef.current || !clockRef.current) return;
+  const updatePos = useCallback(() => {
+    if (!circleRef.current || !clockRef.current) return;
 
-    const angle = clockRef.current.getElapsedTime() * 0.5;
-    const distance = 6;
+    circleRef.current.position.x =
+      Math.sin(clockRef.current.getElapsedTime() * 0.7) * 12;
+    circleRef.current.position.z =
+      Math.cos(clockRef.current.getElapsedTime() * 0.7) * 12;
 
-    const x = Math.sin(angle) * distance;
-    const z = Math.cos(angle) * distance;
-
-    earthRef.current.position.set(x, 0, z);
-    earthRef.current.rotation.y += 0.004;
-
-    earthPositionRef.current = earthRef.current.position;
+    circleRef.current.rotation.y += 0.002;
   }, []);
 
-  useFrame(() => updateEarthPos());
+  useFrame(() => updatePos());
 
   return (
-    <group ref={earthRef}>
-      <mesh castShadow receiveShadow>
-        <sphereGeometry args={[1, 32, 32]} />
-        <meshPhongMaterial
-          map={earthTexture}
-          normalMap={earthNormal}
-          shininess={1000}
-          displacementMap={earthDisplacement}
-          specularMap={earthSpecular}
-          displacementScale={0.2}
-          emissiveMap={earthNight}
-          emissiveIntensity={1.5}
-          emissive={0xffffff}
-        />
-      </mesh>
-
-      <Moon />
-    </group>
+    <mesh ref={circleRef} castShadow receiveShadow>
+      <sphereGeometry args={[1, 32, 32]} />
+      <meshPhongMaterial
+        map={earthTexture}
+        normalMap={earthNormal}
+        shininess={1000}
+        emissiveMap={earthNight}
+        emissiveIntensity={1.5}
+        emissive={0xffffff}
+      />
+    </mesh>
   );
 };
 
